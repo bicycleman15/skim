@@ -1,13 +1,13 @@
 """
-Sample Usage: 
+Sample Usage: (modify `--prefix` and other args accordingly for `trn_doc`, `lbl` or `rewrite_doc`)
 
-CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --mixed_precision fp16 skim/step-1/create_embeddings.py \
---raw_text_file_path artifacts/step-1/slm-large-scale-inference/orcas/raw_rewrites.txt \
+CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --mixed_precision fp16 create_embeddings.py \
+--raw_text_file_path artifacts/slm-generations/LF-ORCAS-800K/raw_rewrites.txt \
 --prefix rewrite_doc \
 --tf sentence-transformers/msmarco-distilbert-base-v4 \
---tokenized_path artifacts/step-1/slm-large-scale-inference/orcas/bert-base-uncased-32 \
+--tokenized_path artifacts/slm-generations/LF-ORCAS-800K/bert-base-uncased-32 \
 --max_len 32 \
---trained_state_dict artifacts/baselines/NGAME/orcas/state_dict.pt
+--trained_state_dict artifacts/pretrained-models/LF-ORCAS-800K/ngame_state_dict.pt
 
 """
 from typing import OrderedDict

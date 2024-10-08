@@ -2,8 +2,8 @@
 Sample usage:
 
 accelerate launch --num_processes 4 --mixed_precision fp16 skim/step-2/gpu_anns.py \
---x-embeddings artifacts/step-1/slm-large-scale-inference/orcas/rewrite_doc_embedding.npy \
---x-embeddings artifacts/step-1/slm-large-scale-inference/orcas/trn_doc_embedding.npy \
+--x-embeddings artifacts/slm-generations/LF-ORCAS-800K/rewrite_doc_embedding.npy \
+--y-embeddings artifacts/datasets/LF-ORCAS-800K/trn_doc_embedding.npy \
 --num-ngbrs 200
 
 """
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     args.embeddings_folder = os.path.dirname(args.x_embeddings)
-    assert args.embeddings_folder == os.path.dirname(args.y_embeddings), "Both x_embeddings and y_embeddings must be in the same folder..."
+    # assert args.embeddings_folder == os.path.dirname(args.y_embeddings), "Both x_embeddings and y_embeddings must be in the same folder..."
     print("Embeddings folder is:", args.embeddings_folder)
 
     accelerate = Accelerator()
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             
                 start_idx += all_scores.shape[0]
 
-    if accelerate.is_main_process:
+    if accelerate.is_main_process: # Dump the neighbours in `x-embeddings` folder
         print("Saving nearest neighbours indices and scores at:", f"{args.embeddings_folder}")
         np.save(f"{args.embeddings_folder}/ngbr_indices_mat.npy", all_indices_mat)
         np.save(f"{args.embeddings_folder}/ngbr_scores_mat.npy", all_scores_mat)
